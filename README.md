@@ -4,7 +4,7 @@ This app is a demo replica of Spotify (using their spotify api) that I decided t
 
 ## Project Status
 
-This project is currently in development. There are many features still not implemented and I will try to add as many as I can, and as many as I know how to do, due to being not experienced in React
+This project is currently in development. There are many features still not implemented and I will try to add as many as I can.
 
 ## Project Screen Shot(s)
 
