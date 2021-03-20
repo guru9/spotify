@@ -10,11 +10,11 @@ This project is currently in development. There are many features still not impl
 
 ### Login Page
 
-![alt text](https://github.com/fvukoguru9jevic/spotify/blob/master/blob/spotify-login.png)
+![alt text](https://github.com/guru9/spotify/blob/master/blob/spotify-login.png)
 
 ### Home Page
 
-![alt text](https://github.com/fvukoguru9jevic/spotify/blob/master/blob/spotify-home.png)
+![alt text](https://github.com/guru9/spotify/blob/master/blob/spotify-home.png)
 
 ## Installation and Setup Instructions
 
