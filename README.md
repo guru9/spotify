@@ -6,6 +6,16 @@ This app is a demo replica of Spotify (using their spotify api) that I decided t
 
 This project is currently in development. There are many features still not implemented and I will try to add as many as I can, and as many as I know how to do, due to being not experienced in React
 
+## Project Screen Shot(s)
+
+### Login Page
+
+![alt text](https://github.com/fvukoguru9jevic/spotify/blob/master/blob/spotify-login.png)
+
+### Home Page
+
+![alt text](https://github.com/fvukoguru9jevic/spotify/blob/master/blob/spotify-home.png)
+
 ## Installation and Setup Instructions
 
 #### Example:
@@ -22,7 +32,7 @@ Installation:
 
 To Start Server:
 
-`npm run build && npm start`
+`npm start`
 
 To Visit App:
 
