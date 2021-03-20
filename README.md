@@ -1,6 +1,6 @@
 ## Spotify React Clone
 
-This app is a demo replica of Spotify (using their spotify api) that I decided to create in order to learn more into React and context-api. Yup also have fun!!!
+This app is a demo replica of Spotify (using their spotify api) that I decided to create in order to learn more into React and context-api. Yup also have fun!!! :love_you_gesture:	
 
 ## Project Status
 
