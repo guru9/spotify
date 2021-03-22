@@ -9,6 +9,7 @@ const scopes = [
   'user-read-playback-state',
   'user-top-read',
   'user-modify-playback-state',
+  'streaming',
 ]
 
 // Retrieve Token

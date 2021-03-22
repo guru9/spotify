@@ -37,21 +37,31 @@ function App() {
         })
       })
 
-      // Set Set Playlists
-      spotify.getUserPlaylists().then((playlists) => {
+      //set user playlist
+      spotify.getPlaylist('6nhXCWh2nVJZoUDGN7daGt').then((playlists) => {
         dispatch({
           type: 'SET_PLAYLISTS',
           playlists: playlists,
         })
       })
 
-      // Set Discover Weekly
-      spotify.getPlaylist('37i9dQZEVXcQDpexiuk3Vq').then((response) => {
-        dispatch({
-          type: 'SET_DISCOVER_WEEKLY',
-          discover_weekly: response,
-        })
-      })
+      // spotify.getUserPlaylists().then((playlists) => {
+      //   dispatch({
+      //     type: 'SET_PLAYLISTS',
+      //     playlists: playlists,
+      //   })
+      // })
+
+      //set artist albums
+      spotify.getArtistAlbums('1plObTufEAfeL1hk8Qz24v').then(
+        // 1plObTufEAfeL1hk8Qz24v
+        (albums) => {
+          dispatch({
+            type: 'SET_ARTIST_ALBUMS',
+            artist_albums: albums.items,
+          })
+        }
+      )
     }
   }, [])
 

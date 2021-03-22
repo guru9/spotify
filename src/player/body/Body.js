@@ -1,86 +1,76 @@
 import './Body.css'
 import { useDataLayerValue } from '../../data/DataLayer'
-import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled'
-import FavoriteIcon from '@material-ui/icons/FavoriteBorderOutlined'
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import DurationIcon from '@material-ui/icons/AccessTimeSharp'
+import { useSoundLayerValue } from '../../data/SoundLayer'
 import Header from '../header/Header'
 import SongRow from '../songs/SongRow'
+import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled'
+import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled'
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 
 function Body({ spotify }) {
-  // Track Duration
-  var dHours = Math.floor(4585515 / 3600) % 24
-  var dMinutes = Math.floor(4585515 / 60000) % 60
-  var dSeconds = ((4585515 % 60000) / 1000).toFixed(0)
-  var dTrackTime = dHours + ' hr ' + dMinutes + ' min '
+  const [{ current_playlist, track, tracks }] = useDataLayerValue()
+  const [{ playing, volume }, soundDispatch] = useSoundLayerValue()
 
-  const [{ discover_weekly }, dispatch] = useDataLayerValue()
+  console.log('track----', track, tracks)
 
-  const tracks = discover_weekly && discover_weekly.tracks.items
+  const startPlaying = () => {
+    soundDispatch({
+      type: 'SET_PLAYING',
+      playing: true,
+    })
+    soundDispatch({
+      type: 'SET_VOLUME',
+      volume: volume / 100,
+    })
+  }
+
+  const stopPlaying = () => {
+    soundDispatch({
+      type: 'SET_PLAYING',
+      playing: false,
+    })
+  }
 
   return (
     <div className='body'>
-      {/* Get './Header' */}
       <Header spotify={spotify} />
-
-      {/* Discover Weekly Info */}
       <div className='body__info'>
         <img
-          id='discover__profileImage'
-          src={discover_weekly?.images[0].url}
+          src={
+            current_playlist
+              ? current_playlist?.images[0].url
+              : 'https://cdn.shortpixel.ai/client/to_webp,q_lossy,ret_img,w_250/https://www.hypebot.com/wp-content/uploads/2020/07/discover-weekly-250x250.png'
+          }
           alt=''
         />
         <div className='body__infoText'>
           <strong>PLAYLIST</strong>
-          <h2>Discover Weekly</h2>
-          <div>
-            {discover_weekly?.description}
-            <br />
-            <a href='https://open.spotify.com/user/spotify'>Spotify </a>
-            &bull;<span> 30 songs, {dTrackTime}</span>
-          </div>
+          <h2>{current_playlist?.name}</h2>
+          <p>{current_playlist?.description}</p>
         </div>
       </div>
 
-      {/* Play Songs */}
       <div className='body__songs'>
         <div className='body__icons'>
-          <PlayCircleFilledIcon className='body__shuffle icon__green' />
+          {playing ? (
+            <PauseCircleFilledIcon
+              onClick={track ? stopPlaying : null}
+              className='body__shuffle'
+            />
+          ) : (
+            <PlayCircleFilledIcon
+              onClick={track ? startPlaying : null}
+              fontSize='large'
+              className='body__shuffle'
+            />
+          )}
           <FavoriteIcon fontSize='large' />
           <MoreHorizIcon />
         </div>
-
-        {/* Songs Header */}
-        <ul className='body__songsHeader'>
-          <li className='body__songsNumber'>
-            <p>#</p>
-          </li>
-          <li className='body__songsTitle'>
-            <p>TITLE</p>
-          </li>
-          <li className='body__songsAlbum'>
-            <p>ALBUM</p>
-          </li>
-          <li className='body__songsRelease'>
-            <p>RELEASE</p>
-          </li>
-          <li className='body__songsDurationIcon'>
-            <DurationIcon className='body__duration' />
-          </li>
-        </ul>
-
-        {/* Get Tracks */}
-        {tracks && (
-          <div>
-            {tracks.map((item) => (
-              <SongRow
-                key={item.track.id}
-                track={item.track}
-                duration={item.duration}
-              />
-            ))}
-          </div>
-        )}
+        {tracks?.items.map((track) => {
+          return <SongRow track={track} key={track.track.id} />
+        })}
       </div>
     </div>
   )
