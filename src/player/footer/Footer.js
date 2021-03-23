@@ -4,10 +4,10 @@ import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline'
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious'
 import SkipNextIcon from '@material-ui/icons/SkipNext'
 import ShuffleIcon from '@material-ui/icons/Shuffle'
-import RepeatIcon from '@material-ui/icons/Repeat'
+import RepeatOneIcon from '@material-ui/icons/RepeatOne'
 import { Grid, Slider } from '@material-ui/core'
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay'
-import VolumeDownIcon from '@material-ui/icons/VolumeDown'
+import VolumeUpIcon from '@material-ui/icons/VolumeUp'
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline'
 import { useDataLayerValue } from '../../data/DataLayer'
 import { useSoundLayerValue } from '../../data/SoundLayer'
@@ -19,8 +19,7 @@ function Footer() {
     soundDispatch,
   ] = useSoundLayerValue()
 
-  const [volumeVal, setVolumeVal] = useState(30)
-  console.log('volume----', volume, volumeVal)
+  const [volumeVal, setVolumeVal] = useState(volume * 100)
 
   const startPlaying = () => {
     soundDispatch({
@@ -29,7 +28,7 @@ function Footer() {
     })
     soundDispatch({
       type: 'SET_VOLUME',
-      volume: volume / 100,
+      volume: volumeVal / 100,
     })
   }
 
@@ -60,12 +59,11 @@ function Footer() {
     })
   }
 
-  const handleChange = (event, value) => {
+  const handleChange = (e, value) => {
     setVolumeVal(value)
-
     soundDispatch({
       type: 'SET_VOLUME',
-      volume: volumeVal / 100,
+      volume: value / 100,
     })
   }
 
@@ -149,7 +147,7 @@ function Footer() {
               <PauseCircleOutlineIcon
                 onClick={track ? stopPlaying : null}
                 fontSize='large'
-                className='footer__icon'
+                className='footer__green'
               />
             ) : (
               <PlayCircleOutlineIcon
@@ -159,7 +157,7 @@ function Footer() {
               />
             )}
             <SkipNextIcon className='footer__icon' />
-            <RepeatIcon
+            <RepeatOneIcon
               onClick={track ? setRepeat : null}
               className={repeat ? 'footer__green' : 'footer__icon'}
             />
@@ -175,7 +173,7 @@ function Footer() {
                 <PlaylistPlayIcon />
               </Grid>
               <Grid item>
-                <VolumeDownIcon />
+                <VolumeUpIcon />
               </Grid>
               <Grid item xs>
                 <Slider

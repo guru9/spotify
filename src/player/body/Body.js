@@ -54,7 +54,7 @@ function Body({ spotify }) {
           {playing ? (
             <PauseCircleFilledIcon
               onClick={track ? stopPlaying : null}
-              className='body__shuffle'
+              className='body__shuffle icon__green'
             />
           ) : (
             <PlayCircleFilledIcon

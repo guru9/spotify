@@ -11,10 +11,7 @@ function SongRow({ track }) {
   var seconds = ((track.track.duration_ms % 60000) / 1000).toFixed(0)
   var trackTime = minutes + ':' + (seconds < 10 ? '0' : '') + seconds
 
-  console.log('track-----', track)
-
   const handleTrack = (track) => {
-    console.log('track-changed----', track)
     dispatch({
       type: 'SET_TRACK',
       track: track,

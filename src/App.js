@@ -5,6 +5,8 @@ import SpotifyWebApi from 'spotify-web-api-js'
 import './App.css'
 import { useDataLayerValue } from './data/DataLayer'
 import Player from './player/Player'
+import { SoundLayer } from './data/SoundLayer'
+import soundReducer, { soundInitialState } from './data/soundReducer'
 
 // Spotify
 const spotify = new SpotifyWebApi()
@@ -13,7 +15,7 @@ function App() {
   document.oncontextmenu = new Function('return false;')
 
   const [token, setToken] = useState(null)
-  const [{ user }, dispatch] = useDataLayerValue()
+  const [{}, dispatch] = useDataLayerValue()
 
   useEffect(() => {
     const hash = getTokenFromUrl()
@@ -67,7 +69,13 @@ function App() {
 
   return (
     <div className='app'>
-      {token ? <Player spotify={spotify} /> : <Login />}
+      {token ? (
+        <SoundLayer initialState={soundInitialState} reducer={soundReducer}>
+          <Player spotify={spotify} />
+        </SoundLayer>
+      ) : (
+        <Login />
+      )}
     </div>
   )
 }
