@@ -12,8 +12,6 @@ function Body({ spotify }) {
   const [{ current_playlist, track, tracks }] = useDataLayerValue()
   const [{ playing, volume }, soundDispatch] = useSoundLayerValue()
 
-  console.log('track----', track, tracks)
-
   const startPlaying = () => {
     soundDispatch({
       type: 'SET_PLAYING',

@@ -7,7 +7,6 @@ import LibraryMusicIcon from '@material-ui/icons/LibraryMusic'
 
 function Sidebar({ spotify }) {
   const [{ playlists }] = useDataLayerValue()
-  console.log('----pl---', playlists)
   return (
     <div className='sidebar'>
       <img

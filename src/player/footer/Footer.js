@@ -1,48 +1,123 @@
-import { useState, useEffect } from 'react'
-import ReactDOM from 'react-dom'
+import { useState } from 'react'
 import './Footer.css'
-import FavoriteIcon from '@material-ui/icons/FavoriteBorderOutlined'
-import PlayCircleOutlineIcon from '@material-ui/icons/PlayArrow'
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline'
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious'
 import SkipNextIcon from '@material-ui/icons/SkipNext'
 import ShuffleIcon from '@material-ui/icons/Shuffle'
 import RepeatIcon from '@material-ui/icons/Repeat'
+import { Grid, Slider } from '@material-ui/core'
+import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay'
 import VolumeDownIcon from '@material-ui/icons/VolumeDown'
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline'
-import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay'
-import DevicesSharpIcon from '@material-ui/icons/DevicesSharp'
-import { Grid, Slider } from '@material-ui/core'
 import { useDataLayerValue } from '../../data/DataLayer'
 import { useSoundLayerValue } from '../../data/SoundLayer'
 
 function Footer() {
-  const [{ token, track }] = useDataLayerValue()
-  const [{ playing }, soundDispatch] = useSoundLayerValue()
-  const [playPause, setPlayPause] = useState(false)
+  const [{ track, tracks }, dispatch] = useDataLayerValue()
+  const [
+    { audio, playing, volume, repeat, shuffle },
+    soundDispatch,
+  ] = useSoundLayerValue()
 
-  let audio = new Audio(track?.preview_url)
+  const [volumeVal, setVolumeVal] = useState(30)
+  console.log('volume----', volume, volumeVal)
 
-  const handleSongs = async () => {
-    setPlayPause(playing ? false : true)
-
-    await soundDispatch({
+  const startPlaying = () => {
+    soundDispatch({
       type: 'SET_PLAYING',
-      playing: playPause,
+      playing: true,
     })
-    if (playPause) {
-      soundDispatch({
-        type: 'SET_AUDIO',
-        audio: audio.play(),
-      })
-    } else {
-      soundDispatch({
-        type: 'SET_AUDIO',
-        audio: audio.pause(),
-      })
-    }
+    soundDispatch({
+      type: 'SET_VOLUME',
+      volume: volume / 100,
+    })
   }
 
-  console.log('----', track, playPause, playing)
+  const stopPlaying = () => {
+    soundDispatch({
+      type: 'SET_PLAYING',
+      playing: false,
+    })
+  }
+
+  const setRepeat = () => {
+    if (!repeat && shuffle) {
+      setShuffle()
+    }
+    soundDispatch({
+      type: 'SET_REPEAT',
+      repeat: !repeat,
+    })
+  }
+
+  const setShuffle = () => {
+    if (!shuffle && repeat) {
+      setRepeat()
+    }
+    soundDispatch({
+      type: 'SET_SHUFFLE',
+      shuffle: !shuffle,
+    })
+  }
+
+  const handleChange = (event, value) => {
+    setVolumeVal(value)
+
+    soundDispatch({
+      type: 'SET_VOLUME',
+      volume: volumeVal / 100,
+    })
+  }
+
+  if (audio) {
+    audio.onended = () => {
+      if (shuffle) {
+        while (true) {
+          let randomTrackNumber = Math.floor(
+            Math.random() * tracks.items.length
+          )
+          let randomTrack = tracks.items[randomTrackNumber].track
+          if (track !== randomTrack) {
+            dispatch({
+              type: 'SET_TRACK',
+              track: randomTrack,
+            })
+
+            let wasPlaying = playing
+            soundDispatch({
+              type: 'SET_PLAYING',
+              playing: false,
+            })
+
+            let audio = new Audio(randomTrack.preview_url)
+            audio.loop = repeat
+            soundDispatch({
+              type: 'SET_AUDIO',
+              audio: audio,
+            })
+
+            if (wasPlaying) {
+              soundDispatch({
+                type: 'SET_PLAYING',
+                playing: true,
+              })
+            }
+
+            document.title = `${randomTrack.name} · ${randomTrack.artists
+              .map((artist) => artist.name)
+              .join(', ')}`
+            break
+          }
+        }
+      }
+      if (!shuffle && !repeat) {
+        soundDispatch({
+          type: 'SET_PLAYING',
+          playing: false,
+        })
+      }
+    }
+  }
 
   return (
     <div className='footer'>
@@ -52,64 +127,65 @@ function Footer() {
           <div className='footer__left'>
             <img
               className='footer__albumLogo'
-              src={track?.album.images[0].url}
+              src={track ? track.album.images[0].url : ''}
               alt=''
             />
             <div className='footer__songInfo'>
-              <a>
-                <h5>{track?.name}</h5>
-              </a>
-              <a>
-                <p>{track?.album.name}</p>
-              </a>
+              <h4>{track ? track.name : 'No song selected'}</h4>
+              <p>
+                {track
+                  ? track.artists.map((artist) => artist.name).join(', ')
+                  : null}
+              </p>
             </div>
-            <FavoriteIcon className='footer__heartCurrent' />
           </div>
-
-          {/*  Player Controls */}
           <div className='footer__center'>
-            <ShuffleIcon className='footer__green' />
+            <ShuffleIcon
+              onClick={track ? setShuffle : null}
+              className={shuffle ? 'footer__green' : 'footer__icon'}
+            />
             <SkipPreviousIcon className='footer__icon' />
             {playing ? (
               <PauseCircleOutlineIcon
+                onClick={track ? stopPlaying : null}
                 fontSize='large'
-                className='footer__icon footer__play'
-                onClick={handleSongs}
+                className='footer__icon'
               />
             ) : (
               <PlayCircleOutlineIcon
+                onClick={track ? startPlaying : null}
                 fontSize='large'
-                className='footer__icon footer__play'
-                onClick={handleSongs}
+                className='footer__icon'
               />
             )}
             <SkipNextIcon className='footer__icon' />
-            <RepeatIcon className='footer__green' />
+            <RepeatIcon
+              onClick={track ? setRepeat : null}
+              className={repeat ? 'footer__green' : 'footer__icon'}
+            />
           </div>
           <div className='footer__durationContainer'>
             <span>01:20</span>
             <Slider className='footer__durationBar' />
             <span>3:34</span>
           </div>
-
-          {/* Volume Controls  */}
           <div className='footer__right'>
-            <div className='footer__rightContainer'>
-              <Grid container spacing={2}>
-                <Grid item>
-                  <PlaylistPlayIcon className='footer__playlistIcon' />
-                </Grid>
-                <Grid item>
-                  <DevicesSharpIcon className='footer__deviceIcon' />
-                </Grid>
-                <Grid item>
-                  <VolumeDownIcon className='footer__volumeIcon' />
-                </Grid>
-                <Grid item xs>
-                  <Slider className='footer__volumeSlider' />
-                </Grid>
+            <Grid container spacing={2}>
+              <Grid item>
+                <PlaylistPlayIcon />
               </Grid>
-            </div>
+              <Grid item>
+                <VolumeDownIcon />
+              </Grid>
+              <Grid item xs>
+                <Slider
+                  value={volumeVal}
+                  onChange={handleChange}
+                  marks
+                  aria-labelledby='continuous-slider'
+                />
+              </Grid>
+            </Grid>
           </div>
         </>
       ) : (

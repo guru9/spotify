@@ -7,8 +7,8 @@ function SongRow({ track }) {
   const [{ playing, repeat }, soundDispatch] = useSoundLayerValue()
 
   // Song Duration
-  var minutes = Math.floor(track.duration_ms / 60000)
-  var seconds = ((track.duration_ms % 60000) / 1000).toFixed(0)
+  var minutes = Math.floor(track.track.duration_ms / 60000)
+  var seconds = ((track.track.duration_ms % 60000) / 1000).toFixed(0)
   var trackTime = minutes + ':' + (seconds < 10 ? '0' : '') + seconds
 
   console.log('track-----', track)

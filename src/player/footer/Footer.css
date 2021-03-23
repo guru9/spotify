@@ -7,7 +7,7 @@
   width: 100%;
   background-color: #282828;
   padding: 20px;
-  border-top:1px solid black;
+  border-top: 1px solid black;
 }
 
 /* Album Info */
@@ -45,7 +45,7 @@
 .footer__heartCurrent {
   margin-left: 5px;
   font-size: 20px !important;
-  opacity: 0.5;  
+  opacity: 0.5;
 }
 
 .footer__heartCurrent:hover {
@@ -62,7 +62,7 @@
   display: flex;
   align-items: center;
 }
-.footer__durationContainer > span { 
+.footer__durationContainer > span {
   margin: 0 auto;
   color: white;
   font-size: 14px;
@@ -76,6 +76,7 @@
 .footer__durationContainer * .MuiSlider-thumb {
   justify-content: center;
   display: none;
+  background-color: #1ed15e;
 }
 
 .footer__durationContainer * .MuiSlider-thumb:hover {
@@ -169,33 +170,10 @@
   color: #b3b3b3 !important;
 }
 
-.footer__rightContainer *  .MuiSlider-thumb {
-  justify-content: center;
-  display: none;
-}
-
-.footer__rightContainer:hover *  .MuiSlider-thumb {
-  color: white;
-  margin-top: -2.5px;
-  display: block;
-}
-
-.footer__rightContainer * .MuiSlider-track {
-  width: 50px;
-  height: 5px;
-  border-radius: 10px;
-}
-
-.footer__rightContainer * .MuiSlider-rail {
-  width: 100px;
-  height: 5px;
-  border-radius: 10px;
-}
-
-.footer__rightContainer:hover * .MuiSlider-track {
+.footer__right :is(.MuiSlider-thumb, .MuiSlider-markActive) {
   background-color: #1ed15e;
 }
 
-.footer__rightContainer {
-  padding-left: 50%;
+.footer__durationContainer :is(.MuiSlider-track) {
+  background-color: #1ed15e;
 }
