@@ -55,15 +55,12 @@ function App() {
       // })
 
       //set artist albums
-      spotify.getArtistAlbums('1plObTufEAfeL1hk8Qz24v').then(
-        // 1plObTufEAfeL1hk8Qz24v
-        (albums) => {
-          dispatch({
-            type: 'SET_ARTIST_ALBUMS',
-            artist_albums: albums.items,
-          })
-        }
-      )
+      spotify.getArtistAlbums('1plObTufEAfeL1hk8Qz24v').then((albums) => {
+        dispatch({
+          type: 'SET_ARTIST_ALBUMS',
+          artist_albums: albums.items,
+        })
+      })
     }
   }, [])
 
